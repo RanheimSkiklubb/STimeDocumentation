@@ -1,0 +1,30 @@
+@startuml TimeLord
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_TOP_DOWN
+
+title Container diagram for TimeLord - Racetiming system
+
+Person(part, "Race Participant", "Signing up for race through web interface.")
+Person(start, "Starter", "Uses mobile app for starting the racers and marking not started (DNS).")
+Person(time, "Timer", "Times the racers. Creates final ranking and marks not started DNS, not finished DNF, disqualified DSQ etc")
+Person(org, "Race Organizer", "Prepares the race. Sets up distances, classes and other race details.")
+
+System_Boundary(web, "TimeLord") {
+    Container(part_app, "Sign up interface", "React", "Allows users to sign up for a specific race.")
+    Container(start_app, "Starter App", "React Native", "Gives the starter a view of the start times and the participants.")
+    Container(timer_app, "Timer App", "React Native", "Lets the timer register time events for participants.")
+    Container(admin, "Race administration interface", "React", "Provides functionality for administering a race and change the setup.")
+    ContainerDb(db, "Race information database", "Firebase", "Stores all race and participant information.")
+
+    Rel(part_app, db, "Read & write to", "REST/JSON")
+    Rel(start_app, db, "Read & write to", "REST/JSON")
+    Rel(timer_app, db, "Read & write to", "REST/JSON")
+    Rel(admin, db, "Read & write to", "REST/JSON")
+}
+
+Rel(part, part_app, "Uses", "JSON/HTTPS")
+Rel(start, start_app, "Uses", "JSON/HTTPS")
+Rel(time, timer_app, "Uses", "JSON/HTTPS")
+Rel(org, admin, "Uses", "JSON/HTTPS")
+@enduml
