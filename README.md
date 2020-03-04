@@ -1,4 +1,4 @@
-# TimeLord - Simple Race Timing System
+# STime - Simple Race Timing System
 
 The system consists of the following parts:
  * Sign-up interface
